@@ -2,8 +2,9 @@
   "name": "use-oop-swr",
   "version": "0.1.0",
   "license": "MIT",
-  "author": "kolengri",
+  "author": "Grigoriy Kolenko <kolenko@me.com>",
   "main": "dist/index.js",
+  "repository": "kolengri/use-oop-swr",
   "module": "dist/use-oop-swr.esm.js",
   "typings": "dist/index.d.ts",
   "keywords": [
