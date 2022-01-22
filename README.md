@@ -1,181 +1,187 @@
-# DTS React w/ Storybook User Guide
+# use-oop-swr
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with DTS. Let’s get you oriented with what’s here and how to use it.
+## OOP useSWR hook wrapper
 
-> This DTS setup is meant for developing React component libraries (not apps!) that can be published to NPM. If you’re looking to build a React-based app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+[![NPM](https://img.shields.io/npm/v/use-oop-swr.svg)](https://www.npmjs.com/package/use-oop-swr)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Badges](https://badgen.net/npm/license/use-oop-swr)](https://www.npmjs.com/package/use-oop-swr)
+[![Badges](https://badgen.net/npm/dependents/use-oop-swr)](https://www.npmjs.com/package/use-oop-swr)
+[![Badges](https://badgen.net/npm/types/use-oop-swr)](https://www.npmjs.com/package/use-oop-swr)
+[![Badges](https://badgen.net/github/issues/kolengri/use-oop-swr)](https://www.npmjs.com/package/use-oop-swr)
+[![Badges](https://badgen.net/bundlephobia/min/use-oop-swr)](https://bundlephobia.com/result?p=use-oop-swr)
+[![Badges](https://badgen.net/bundlephobia/minzip/use-oop-swr)](https://bundlephobia.com/result?p=use-oop-swr)
 
-> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
+## Install
 
-## Commands
-
-DTS scaffolds your new library inside `/src`, and also sets up a [Vite-based](https://vitejs.dev) playground for it inside `/example`.
-
-The recommended workflow is to run DTS in one terminal:
-
-```bash
-npm start # or yarn start
-```
-
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
-
-Then run either Storybook or the example playground:
-
-### Storybook
-
-Run inside another terminal:
+### 1. Install package
 
 ```bash
-yarn storybook
+npm install --save use-oop-swr
 ```
-
-This loads the stories from `./stories`.
-
-> NOTE: Stories should reference the components as if using the library, similar to the example playground. This means importing from the root project directory. This has been aliased in the tsconfig and the storybook webpack config as a helper.
-
-### Example
-
-Then run the example inside another:
 
 ```bash
-cd example
-npm i # or yarn to install dependencies
-npm start # or yarn start
+yarn add use-oop-swr
 ```
 
-The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure DTS is running in watch mode like we recommend above.
+### 2. Install class-transformer and reflect-metadata
 
-To do a one-off build, use `npm run build` or `yarn build`.
+1. `class-transformer` installation
 
-To run tests, use `npm test` or `yarn test`.
+   ```bash
+   npm install class-transformer --save
+   ```
 
-## Configuration
+   ```bash
+   yarn add class-transformer
+   ```
 
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
+2. `reflect-metadata` shim is required, install it too:
 
-### Jest
+   ```bash
+   npm install reflect-metadata --save
+   ```
 
-Jest tests are set up to run with `npm test` or `yarn test`.
+   ```bash
+   yarn add reflect-metadata
+   ```
 
-### Bundle analysis
+   add to the top of index.tsx
 
-Calculates the real cost of your library using [size-limit](https://github.com/ai/size-limit) with `npm run size` and visulize it with `npm run analyze`.
+   ```tsx
+   import 'reflect-metadata';
+   ```
 
-#### Setup Files
+   or add to `<script>` `reflect-metadata` in the head of your `index.html`:
 
-This is the folder structure we set up for you:
+   ```html
+   <html>
+     <head>
+       <!-- ... -->
+       <script src="node_modules/reflect-metadata/Reflect.js"></script>
+     </head>
+     <!-- ... -->
+   </html>
+   ```
 
-```txt
-/example
-  index.html
-  index.tsx       # test your component here in a demo app
-  package.json
-  tsconfig.json
-/src
-  index.tsx       # EDIT THIS
-/test
-  index.test.tsx  # EDIT THIS
-/stories
-  Thing.stories.tsx # EDIT THIS
-/.storybook
-  main.js
-  preview.js
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
+## Usage
+
+The aim of this package is to end up with annoying practice of adding properties to data received from api with swr.
+
+### In JavaScript there are two types of objects
+
+plain (literal) objects
+class (constructor) objects
+Plain objects are objects that are instances of Object class. Sometimes they are called literal objects, when created via {} notation. Class objects are instances of classes with own defined constructor, properties and methods. Usually you define them via class notation.
+
+So, what is the problem?
+
+Sometimes you want to transform plain javascript object to the ES6 classes you have. For example, if you are loading a json from your backend, some api or from a json file, and after you JSON.parse it you have a plain javascript object, not instance of class you have.
+
+For example you have a list of users in your users.json that you are loading:
+
+```json
+[
+  {
+    "id": 1,
+    "firstName": "Johny",
+    "lastName": "Cage",
+    "age": 27
+  },
+  {
+    "id": 2,
+    "firstName": "Ismoil",
+    "lastName": "Somoni",
+    "age": 50
+  },
+  {
+    "id": 3,
+    "firstName": "Luke",
+    "lastName": "Dacascos",
+    "age": 12
+  }
+]
 ```
 
-#### React Testing Library
+And you have a User class:
 
-We do not set up `react-testing-library` for you yet, we welcome contributions and documentation on this.
+```jsx
+export class User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: number;
 
-### Rollup
+  getName() {
+    return this.firstName + ' ' + this.lastName;
+  }
 
-DTS uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
-
-### TypeScript
-
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
-
-## Continuous Integration
-
-### GitHub Actions
-
-Two actions are added by default:
-
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [size-limit](https://github.com/ai/size-limit)
-
-## Optimizations
-
-Please see the main `dts` [optimizations docs](https://github.com/weiran-zsd/dts-cli#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
+  isAdult() {
+    return this.age > 36 && this.age < 60;
+  }
 }
 ```
 
-You can also choose to install and use [invariant](https://github.com/weiran-zsd/dts-cli#invariant) and [warning](https://github.com/weiran-zsd/dts-cli#warning) functions.
+You are assuming that you are downloading users of type User with swr and may want to write following code:
 
-## Module Formats
+```tsx
+import * as React from 'react';
+import axios from 'axios';
+import useSWR from 'swr';
+import { User } from './User';
 
-CJS, ESModules, and UMD module formats are supported.
+export type UsersProps = {};
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+export const Users: React.FC<UsersProps> = (props) => {
+  const { data } = useSWR<User[]>('yourapiendpoint/users', (url) =>
+    axios.get(url).then((res) => res.data)
+  );
 
-## Deploying the Example Playground
-
-The Playground is just a simple [Vite](https://vitejs.dev) app, you can deploy it anywhere you would normally deploy that. Here are some guidelines for **manually** deploying with the Netlify CLI (`npm i -g netlify-cli`):
-
-```bash
-cd example # if not already in the example folder
-npm run build # builds to dist
-netlify deploy # deploy the dist folder
+  return <div>{JSON.stringify(data)}</div>;
+};
 ```
 
-Alternatively, if you already have a git repo connected, you can set up continuous deployment with Netlify:
+In this code you can use users[0].id, you can also use users[0].firstName and users[0].lastName. However you cannot use users[0].getName() or users[0].isAdult() because "users" actually is array of plain javascript objects, not instances of User object. You actually lied to compiler when you said that its users: User[].
 
-```bash
-netlify init
-# build command: yarn build && cd example && yarn && yarn build
-# directory to deploy: example/dist
-# pick yes for netlify.toml
+So what to do? How to make a users array of instances of User objects instead of plain javascript objects? Solution is to create new instances of User object and manually copy all properties to new objects. But things may go wrong very fast once you have a more complex object hierarchy.
+
+Alternatives? Yes, you can use use-oop-swr. Purpose of this library is to help you to map your plain javascript objects to the instances of classes you have.
+
+This library also great for models exposed in your APIs, because it provides a great tooling to control what your models are exposing in your API. Here is an example how it will look like:
+
+```tsx
+import * as React from 'react';
+import { useOOPSWR } from 'use-oop-swr';
+import axios from 'axios';
+import useSWR from 'swr';
+import { User } from './User';
+
+export type UsersProps = {};
+
+export const Users: React.FC<UsersProps> = (props) => {
+  const { data } = useOOPSWR(
+    User, // <--- Cool!
+    useSWR('yourapiendpoint/users', (url) =>
+      axios.get(url).then((res) => res.data)
+    )
+  );
+
+  return <div>{JSON.stringify(data)}</div>;
+};
 ```
 
-## Named Exports
+Now you can use users[0].getName() and users[0].isAdult() methods.
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+### Arguments
 
-## Including Styles
+- `classInstance: InstanceType`: Class instance of needly data
+- `swrData:? SWRResponse`: SWR Response object. [Docs](https://swr.vercel.app/docs/getting-started)
+- `options:? ClassTransformOptions`: Options of class-transform plainToInstance function. [Docs](https://github.com/typestack/class-transformer/blob/develop/README.md#plaintoclass)
 
-There are many ways to ship styles, including with CSS-in-JS. DTS has no opinion on this, configure how you like.
+## Inspired by
 
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+- [SWR](https://swr.vercel.app)
+- [class-transformer](https://github.com/typestack/class-transformer)
 
-## Publishing to NPM
+## License
 
-We recommend using [np](https://github.com/sindresorhus/np).
-
-## Usage with Lerna
-
-When creating a new package with DTS within a project set up with Lerna, you might encounter a `Cannot resolve dependency` error when trying to run the `example` project. To fix that you will need to make changes to the `package.json` file _inside the `example` directory_.
-
-The problem is that due to the nature of how dependencies are installed in Lerna projects, the aliases in the example project's `package.json` might not point to the right place, as those dependencies might have been installed in the root of your Lerna project.
-
-Change the `alias` to point to where those packages are actually installed. This depends on the directory structure of your Lerna project, so the actual path might be different from the diff below.
-
-```diff
-   "alias": {
--    "react": "../node_modules/react",
--    "react-dom": "../node_modules/react-dom"
-+    "react": "../../../node_modules/react",
-+    "react-dom": "../../../node_modules/react-dom"
-   },
-```
-
-An alternative to fixing this problem would be to remove aliases altogether and define the dependencies referenced as aliases as dev dependencies instead. [However, that might cause other problems.](https://github.com/palmerhq/tsdx/issues/64)
+MIT © [kolengri](https://github.com/kolengri)
