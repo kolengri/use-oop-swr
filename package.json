@@ -6,6 +6,20 @@
   "main": "dist/index.js",
   "module": "dist/use-oop-swr.esm.js",
   "typings": "dist/index.d.ts",
+  "keywords": [
+    "react",
+    "swr",
+    "use-swr",
+    "use-react-swr",
+    "oop",
+    "use-oop-swr",
+    "object-oriented",
+    "oop-swr",
+    "hooks",
+    "class",
+    "class-transformer",
+    "plane-to-instance"
+  ],
   "files": [
     "dist",
     "src"
