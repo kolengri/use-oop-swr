@@ -158,7 +158,7 @@ import { User } from './User';
 export type UsersProps = {};
 
 export const Users: React.FC<UsersProps> = (props) => {
-  const { data } = useOOPSWR(
+  const [data, swrData] = useOOPSWR(
     User, // <--- Cool!
     useSWR('yourapiendpoint/users', (url) =>
       axios.get(url).then((res) => res.data)
@@ -176,6 +176,10 @@ Now you can use users[0].getName() and users[0].isAdult() methods.
 - `classInstance: InstanceType`: Class instance of needly data
 - `swrData:? SWRResponse`: SWR Response object. [Docs](https://swr.vercel.app/docs/getting-started)
 - `options:? ClassTransformOptions`: Options of class-transform plainToInstance function. [Docs](https://github.com/typestack/class-transformer/blob/develop/README.md#plaintoclass)
+
+### Returns
+
+Hooks returns array with two items. First class instance with, second one is data from swr hook
 
 ## Inspired by
 
