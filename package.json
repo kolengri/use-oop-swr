@@ -1,6 +1,6 @@
 {
   "name": "use-oop-swr",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "license": "MIT",
   "author": "Grigoriy Kolenko <kolenko@me.com>",
   "main": "dist/index.js",
