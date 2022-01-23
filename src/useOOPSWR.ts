@@ -11,11 +11,14 @@ interface UseOOPSWR {
 }
 
 export const useOOPSWR: UseOOPSWR = (classInstance, swrResult, options) => {
-  const obj = JSON.parse(JSON.stringify(swrResult.data || {}));
-  const data = useMemo(
-    () => plainToInstance<any, any>(classInstance, obj, options),
-    [obj]
+  const stringifiedData = useMemo(
+    () => JSON.stringify(swrResult.data || {}),
+    [swrResult.data]
   );
+  const data = useMemo(() => {
+    const obj = JSON.parse(stringifiedData);
+    return plainToInstance<any, any>(classInstance, obj, options);
+  }, [stringifiedData]);
 
   return [data, swrResult];
 };
