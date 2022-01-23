@@ -30,7 +30,7 @@ const TestMemo: React.FC<TestProps> = (props) => {
   return (
     <div>
       <button onClick={() => setTest('test2.json')}>test</button>
-      <span>{JSON.stringify(data.getSum)}</span>
+      <span>{JSON.stringify(data)}</span>
 
       {JSON.stringify(raw)}
       {JSON.stringify(swrData.data)}
